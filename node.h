@@ -13,9 +13,8 @@ private:
 	
 public:
 	Node(char letter, Node* parent);
-	
-//	~Node();
-	
+	~Node();
+
 	unsigned int getLevel() { return level_; }
 	char getKey() { return letter_; }
 	Node* getParent() { return parent_; }

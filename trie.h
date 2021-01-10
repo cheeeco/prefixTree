@@ -16,11 +16,12 @@ private:
 	Node* vertex_;
 public:
 	Trie();
-	//~Trie();
-	Node* getVertex() { return vertex_; }
+	~Trie();
+
+    Node* getVertex() { return vertex_; }
 	
-	Node* insert(char* prefix, unsigned int lentgh);
-	Node* find(char* prefix, unsigned int length);
+	Node* insert(const char* prefix);
+	Node* find(const char* prefix);
 	
 	char* getPrefix(Node* ptr);
 	

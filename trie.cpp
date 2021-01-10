@@ -7,10 +7,19 @@ Trie::Trie() {
 	std::cout << "trie constructed" << std::endl;
 }
 
-Node* Trie::insert(char* prefix, unsigned int length) {
+Trie::~Trie() {
+    delete vertex_;
+    std::cout << "trie destructed" << std::endl;
+}
+
+//prefix - null-terminated string
+Node* Trie::insert(const char* prefix) {
+    std::cout << "inserting prefix \"" << prefix << "\"" << std::endl;
 	Node* ptr = vertex_;
 	Node* child = nullptr;
-	for (unsigned int i = 0; i < length-1; i++) {
+    int i = 0;
+
+	while (prefix[i] != '\0') {
 		child = ptr->findChild(prefix[i]);
 		if ( child == nullptr ) {
 			ptr = ptr->addChild(prefix[i]);
@@ -18,18 +27,23 @@ Node* Trie::insert(char* prefix, unsigned int length) {
 		else {
 			ptr = child;
 		}
-	}
+        i++;
+    }
 	return ptr;
 	
 }
 
-Node* Trie::find(char* prefix, unsigned int length) {	//sizeof(prefix) равен length
-	Node* ptr = vertex_;
-	for (unsigned int i = 0; i < length; i++) {
+//prefix - null-terminated string
+Node* Trie::find(const char* prefix) {
+    std::cout << "finding prefix \"" << prefix << "\"" << std::endl;
+    Node* ptr = vertex_;
+    int i = 0;
+	while (prefix[i] != '\0') {
 		if ( (ptr = ptr->findChild(prefix[i])) == nullptr ) {
 			std::cout << "Prefix " << prefix << " doesn't exist" << i << std::endl;
 			return nullptr;
 		}
+        i++;
 	}
 	
 	return ptr;
