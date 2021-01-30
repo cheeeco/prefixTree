@@ -18,6 +18,11 @@ public:
 	Trie();
 	~Trie();
 
+    Trie(const Trie& other) = delete;
+    Trie(Trie&& other) = delete;
+    Trie& operator =(const Trie& other) = delete;
+    Trie& operator =(Trie&& other) = delete;
+    
     Node* getVertex() { return vertex_; }
     std::string getPrefix(Node* ptr) const;
 	
