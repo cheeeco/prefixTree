@@ -2,8 +2,9 @@
 #define NODE_INTERFACE
 
 #include <unordered_map>
+#include <iostream>
 
-class Node 
+class Node final
 {
 private:
 	char letter_;
@@ -14,17 +15,22 @@ private:
 public:
 	Node(char letter, Node* parent);
 	~Node();
+    
+    Node(const Node& other) = delete;
+    Node(Node&& other) = delete;
+    Node& operator =(const Node& other) = delete;
+    Node& operator =(Node&& other) = delete;
 
-	unsigned int getLevel() { return level_; }
-	char getKey() { return letter_; }
+	unsigned int getLevel() const { return level_; }
+	char getKey() const { return letter_; }
 	Node* getParent() { return parent_; }
-	std::unordered_map<char, Node*> getChildren() { return children_; }
+	const std::unordered_map<char, Node*>& getChildren() const { return children_; }
 		
 	Node* addChild(char key);
 	
 	Node* findChild(char key);
 	
-	void printKey();
+	void printKey(std::ostream& os = std::cout) const;
 };
 
 #endif

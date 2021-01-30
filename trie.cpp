@@ -1,20 +1,22 @@
 #include <iostream>
+#include <cstring>
 
 #include "trie.h"
+#include "dbgs.h"
 
 Trie::Trie() {
 	vertex_ = new Node('\0', nullptr);
-	std::cout << "trie constructed" << std::endl;
+	dbgs << "trie constructed" << std::endl;
 }
 
 Trie::~Trie() {
     delete vertex_;
-    std::cout << "trie destructed" << std::endl;
+    dbgs << "trie destructed" << std::endl;
 }
 
 //prefix - null-terminated string
 Node* Trie::insert(const char* prefix) {
-    std::cout << "inserting prefix \"" << prefix << "\"" << std::endl;
+    dbgs << "inserting prefix \"" << prefix << "\"" << std::endl;
 	Node* ptr = vertex_;
 	Node* child = nullptr;
     int i = 0;
@@ -35,7 +37,7 @@ Node* Trie::insert(const char* prefix) {
 
 //prefix - null-terminated string
 Node* Trie::find(const char* prefix) {
-    std::cout << "finding prefix \"" << prefix << "\"" << std::endl;
+    dbgs << "finding prefix \"" << prefix << "\"" << std::endl;
     Node* ptr = vertex_;
     int i = 0;
 	while (prefix[i] != '\0') {
@@ -45,14 +47,13 @@ Node* Trie::find(const char* prefix) {
 		}
         i++;
 	}
-	
 	return ptr;
 }
 
-char* Trie::getPrefix(Node* ptr) {
+std::string Trie::getPrefix(Node* ptr) const {
 	unsigned int length = ptr->getLevel();	//длина префикса
-	char* prefix = new char[length + 1];
-	prefix[length] = '\0';
+    std::string prefix;
+    prefix.resize(length);
 	
 	for (unsigned int i = length; i > 0; i--) {
 		prefix[i - 1] = ptr->getKey();
@@ -61,13 +62,37 @@ char* Trie::getPrefix(Node* ptr) {
 	return prefix;
 }
 
-void Trie::drawTrie(Node* ptr) {
-	ptr->printKey();
-	for (auto n : ptr->getChildren()) {
+void Trie::decayStr(const char* str) {
+	long int length = std::strlen(str);
+    long int it = 0;
+    Node* ptr = vertex_;
+    Node* a;
+    
+    while (it < length) {
+    	if ((a = ptr->findChild(str[it])) != nullptr) {
+    		ptr = a;
+    		it++;
+    	} else {
+			//тут надо делать вывод номера
+			ptr->addChild(str[it]);    	
+			ptr = vertex_;
+    	}   
+    }
+}
+
+void Trie::init() {
+	for (char i = 65; i <=90; i++) {
+		vertex_->addChild(i);
+	}
+}
+
+void Trie::drawTrie(Node* ptr, std::ostream& os /* = std::cout */) const {
+	ptr->printKey(os);
+	for (auto& n : ptr->getChildren()) {
 		drawTrie(n.second);
 	}
 }
 
-void Trie::drawTrie() {
-	drawTrie(vertex_);
+void Trie::drawTrie(std::ostream& os /* = std::cout */) const {
+	drawTrie(vertex_, os);
 }

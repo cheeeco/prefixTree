@@ -5,10 +5,10 @@
  * поиск (возвращает Node*, если нашло, иначе NULL)
  * инсерт (возвращает Node*, если вставили удачно, иначе NULL)
  * getPrefix(Node* ptr) (возвращает префикс для ptr)
- * getKey(Node* ptr) (возвращает префикс)
  * 
 */
 #include "node.h"
+#include <string>
 
 class Trie
 {
@@ -19,14 +19,15 @@ public:
 	~Trie();
 
     Node* getVertex() { return vertex_; }
+    std::string getPrefix(Node* ptr) const;
 	
 	Node* insert(const char* prefix);
 	Node* find(const char* prefix);
+	void decayStr(const char* str);
 	
-	char* getPrefix(Node* ptr);
-	
-	void drawTrie();
-	void drawTrie(Node* ptr);
+	void init();
+	void drawTrie(std::ostream& os = std::cout) const;
+	void drawTrie(Node* ptr, std::ostream& os = std::cout) const;
 };
 
 #endif
